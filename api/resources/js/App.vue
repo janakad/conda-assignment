@@ -3,7 +3,13 @@
 
         <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg">
             <h1 class="text-2xl font-semibold mb-6 text-gray-800">Contact Form</h1>
-
+            <Transition>
+                <div class="flex items-center p-4 mb-4 text-sm text-green-800 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-900"
+                    v-if="show" role="alert">
+                    <span class="sr-only">Success</span>
+                    <p>Message sent!</p>
+                </div>
+            </Transition>
             <Form @submit="handleSubmit">
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 text-sm font-medium mb-2">Name</label>
@@ -43,24 +49,38 @@
 </template>
 
 <script>
-import { Form, Field, ErrorMessage } from 'vee-validate';
+import { Form, Field, ErrorMessage, useForm } from 'vee-validate';
 import axios from 'axios'
 const baseApiURL = import.meta.env.VITE_BASE_API_URL
 export default {
     name: 'App',
+    data: function () {
+        return {
+            show: false
+        }
+    },
     components: {
         Form,
         Field,
         ErrorMessage,
     },
+    setup: function () {
+        const { setErrors, resetForm } = useForm();
+    },
     methods: {
-        handleSubmit(values) {
+        handleSubmit(values, actions) {
             axios.post(baseApiURL + '/contact', values).then(response => {
                 console.log("🚀 ~ axios.post ~ response:", response)
+                this.show = true
+                setTimeout(() => {
+                    this.show = false
+                }, 5000);
+                actions.resetForm()
             }).catch(error => {
                 if (error.response.status === 422) {
-                    error.response.data.errors
+                    actions.setErrors(error.response.data.errors)
                 }
+                console.error(error)
             })
         },
         validateName(value) {
@@ -110,3 +130,15 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+</style>
