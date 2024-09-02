@@ -20,18 +20,23 @@ The Laravel application code resides inside the `/api` directory. In the root th
 
 ### Running the application
 1. Clone this [repository](https://github.com/janakad/conda-assignment).
-2. Execute following commands in order.
+
+2. Create `api/.env` file from `api/.env.example` file (The values are working for docker without any change).
+
+3. Execute following commands in order.
    ```bash
    docker-compose up -d --build app
    docker-compose run --rm artisan migrate
-   docker-compose run --rm npm run build
+   docker-compose run --rm npm run build #npm run dev for development
    ```
-3. Access the application in http://localhost:80 and mailhog dashboard in http://localhost:8025
-4. For running tests execute following command: 
+4. Access the application in http://localhost:80 and mailhog dashboard in http://localhost:8025
+
+5. For running tests execute following command: 
 ```bash
 docker-compose run --rm artisan test
 ```
-4. There can be cases where application might not work because
+
+6. There can be cases where application might not work because
 * vendor or autoload missing, in that case run 
 ```bash
 docker-compose run --rm composer install
@@ -43,6 +48,26 @@ docker-compose run --rm artisan storage:link
    * for permission issues `sh` into the container and run: 
 ```bash
 chmod -R 755 /var/www/storage
+```
+### Running the application in local environment(without docker)
+1. Clone this [repository](https://github.com/janakad/conda-assignment).
+
+2. Create `api/.env` file from `api/.env.example` file, then change the values in `.env` file relevant to database and mail server.
+
+3. Execute following commands in order:
+```bash
+composer install
+php artisan key:generate
+php artisan migrate
+npm run dev
+php artisan serve
+```
+
+4. Access the application in http://localhost:8000
+
+5. For tests, run following command:
+```bash
+php artisan test
 ```
 
 ### Improvements and optimizations
