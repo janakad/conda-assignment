@@ -2,32 +2,49 @@
 
 **Objective:** Create a basic contact form with frontend validation and backend processing.
 
+### Application structure
+The Laravel application code resides inside the `/api` directory. In the root there are files for the containerization and the readme file.
+
 1. **Front-End (Vue.js):**
-   - Create a simple contact form with fields: Name, Email, Subject, and Message.
-   - Implement client-side validation using Vue.js (e.g., required fields, valid email format).
-   - On form submission, send the data to a Laravel backend API.
-   - For styling please use TailwindCSS.
+   - Basic laravel view inside `api\resources\views\contact\index.blade.php` loading vite configuration and setting the root element of the vue app.
+   - Main single page vue application is `api\resources\js\App.vue` file, where the component, api calling and validation handling
 
 2. **Back-End (Laravel):**
-   - Create a single API endpoint in Laravel to receive the contact form data.
-   - Validate the data on the server-side (e.g., required fields, valid email).
-   - Store the submitted data in a database (create a `contacts` table with appropriate fields).
-   - Send an email to Mailhog Docker container.
-   - Return a JSON response indicating success or failure.
-   - Write a test for the endpoint.
+   - Main functionality is writting inside `api\app\Http\Controllers\ContactController.php` class.
+   - There are other supporting classes such as repositories, requests for validation and services in the app as well.
+   - Database table is created within the `migrations` directory.
+   - An end to end test for couple of scenarios are inside `tests` directory.
 
 3. **Dockerization:**
-   - Provide a basic `Dockerfile` and `docker-compose.yml` to run the Laravel application in a Docker container.
-   - The Docker setup should include the Laravel application and a MySQL database.
-   - Also include Mailhog container to act as the inbox.
+   - There are `docker-compose.yml` file for docker compose and all the docker files are inside `dockerfiles` directory.
 
-4. **Documentation:**
-	- Provide a `README.md` in your repository
-	- Give clear instructions on how to use your repository.
+### Running the application
+1. Clone this [repository](https://github.com/janakad/conda-assignment).
+2. Execute following commands in order.
+   ```bash
+   docker-compose up -d --build app
+   docker-compose run --rm artisan migrate
+   docker-compose run --rm npm run build
+   ```
+3. Access the application in http://localhost:80 and mailhog dashboard in http://localhost:8025
+4. For running tests execute following command: 
+```bash
+docker-compose run --rm artisan test
+```
+4. There can be cases where application might not work because
+* vendor or autoload missing, in that case run 
+```bash
+docker-compose run --rm composer install
+```
+* in case of directory issues run the following:
+```bash
+docker-compose run --rm artisan storage:link
+```
+   * for permission issues `sh` into the container and run: 
+```bash
+chmod -R 755 /var/www/storage
+```
 
-**Evaluation Criteria:**
-- Clean and efficient Vue.js code for form handling and validation.
-- Proper API design and server-side validation in Laravel.
-- Design and logic of the test case in Laravel.
-- Basic understanding of Docker for setting up a development environment.
-- Well written documentation.
+### Improvements and optimizations
+If there are more time I would optimize and improve following things:
+1. Unit tests - an addition to end to end test I would write more unit tests for main classes by mocking database and mailhog to ensure the functionality of the individual classes and methods.
