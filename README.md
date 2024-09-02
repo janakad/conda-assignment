@@ -26,6 +26,7 @@ The Laravel application code resides inside the `/api` directory. In the root th
 3. Execute following commands in order.
    ```bash
    docker-compose up -d --build app
+   docker-compose run --rm composer install
    docker-compose run --rm artisan migrate
    docker-compose run --rm npm run build #npm run dev for development
    ```
