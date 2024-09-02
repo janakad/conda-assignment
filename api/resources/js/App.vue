@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         handleSubmit(values, actions) {
-            axios.post(baseApiURL + '/contact', values).then(response => {
+            axios.post(baseApiURL + '/contacts', values).then(response => {
                 console.log("🚀 ~ axios.post ~ response:", response)
                 this.show = true
                 setTimeout(() => {

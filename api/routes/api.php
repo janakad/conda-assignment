@@ -9,5 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::controller(ContactController::class)->group(function () {
-    Route::post('/contact', 'store');
+    Route::post('/contacts', 'store');
 });
