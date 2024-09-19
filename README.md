@@ -28,6 +28,7 @@ The Laravel application code resides inside the `/api` directory. In the root th
    docker-compose up -d --build app
    docker-compose run --rm composer install
    docker-compose run --rm artisan migrate
+   docker-compose run --rm npm install
    docker-compose run --rm npm run build #npm run dev for development
    ```
 4. Access the application in http://localhost:80 and mailhog dashboard in http://localhost:8025
